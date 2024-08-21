@@ -4,6 +4,7 @@
 namespace App\Modules\core\controllers;
 
 use App\Http\Controllers\Controller;
+use App\Modules\core\services\CrudService;
 use App\Modules\core\traits\ValidationTrait;
 use Illuminate\Http\JsonResponse;
 use App\Modules\core\interfaces\CrudControllerInterface;
@@ -20,15 +21,26 @@ abstract class CrudController extends Controller implements CrudControllerInterf
     protected const METHOD_STORE = "store";
     protected const METHOD_UPDATE = "update";
     protected const METHOD_DESTROY = "destroy";
-    protected string $modelClass;
-    protected Model $model;
-    protected array $searchField = [];
-    protected array $allowedIncludes = [];
-    protected string $indexRequestClass;
-    protected string $showRequestClass;
-    protected string $storeRequestClass;
-    protected string $updateRequestClass;
-    protected string $destroyRequestClass;
+    protected $modelClass;
+    protected ?Model $model;
+    protected ?array $searchField = [];
+    protected ?array $allowedIncludes = [];
+    protected $indexRequestClass;
+    protected $showRequestClass;
+    protected $storeRequestClass;
+    protected $updateRequestClass;
+    protected $destroyRequestClass;
+    protected $crudService;
+
+    /**
+     * Summary of __construct
+     */
+    public function __construct()
+    {
+        $this->crudService = new CrudService();
+        $this->model = app($this->modelClass);
+    }
+
 
     /**
      * Summary of index
@@ -37,63 +49,63 @@ abstract class CrudController extends Controller implements CrudControllerInterf
      */
     public function index(BaseRequest $request): JsonResponse
     {
-        $this->validate($request, $this->indexRequestClass);
+        $this->validation($request, $this->indexRequestClass);
 
-        return response()->json([]);
+        return response()->json($this->crudService->index($request, $this->model, $this->searchField));
     }
 
 
     /**
-     * Summary of index
+     * Summary of show
      * @param BaseRequest $request
      * @param int|string $id
      * @return JsonResponse
      */
     public function show(BaseRequest $request, int|string $id): JsonResponse
     {
-        $this->validate($request, $this->showRequestClass);
+        $this->validation($request, $this->showRequestClass, $id);
 
-        return response()->json([]);
+        return response()->json($this->crudService->show($request, $this->model, $id));
     }
 
 
     /**
-     * Summary of index
+     * Summary of store
      * @param BaseRequest $request
      * @return JsonResponse
      */
     public function store(BaseRequest $request): JsonResponse
     {
-        $this->validate($request, $this->storeRequestClass);
+        $this->validation($request, $this->storeRequestClass);
 
-        return response()->json([]);
+        return response()->json($this->crudService->store($request, $this->model));
     }
 
 
     /**
-     * Summary of index
+     * Summary of update
      * @param BaseRequest $request
      * @param int|string $id
      * @return JsonResponse
      */
     public function update(BaseRequest $request, int|string $id): JsonResponse
     {
-        $this->validate($request, $this->updateRequestClass);
+        $this->validation($request, $this->updateRequestClass, $id);
 
-        return response()->json([]);
+        return response()->json($this->crudService->update($request, $this->model, $id));
     }
 
 
     /**
-     * Summary of index
+     * Summary of destroy
      * @param BaseRequest $request
      * @param int|string $id
      * @return JsonResponse
      */
     public function destroy(BaseRequest $request, int|string $id): JsonResponse
     {
-        $this->validate($request, $this->destroyRequestClass);
+        $this->validation($request, $this->destroyRequestClass, $id);
 
-        return response()->json([]);
+        return response()->json($this->crudService->destroy($request, $this->model, $id));
     }
 }

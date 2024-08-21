@@ -4,7 +4,6 @@
 namespace App\Modules\core\controllers;
 
 use App\Http\Controllers\Controller;
-use App\Modules\core\services\CrudService;
 use App\Modules\core\traits\CrudControllerTrait;
 use Illuminate\Http\JsonResponse;
 use App\Modules\core\interfaces\CrudControllerInterface;

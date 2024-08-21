@@ -4,10 +4,18 @@
 namespace App\Modules\core\traits;
 
 use App\Modules\core\requests\BaseRequest;
+use App\Modules\core\services\CrudService;
 use Illuminate\Validation\ValidationException;
 
-trait ValidationTrait
+trait CrudControllerTrait
 {
+    /**
+     * Summary of validation
+     * @param BaseRequest $request
+     * @param string|null $validationClass
+     * @param mixed $id
+     * @return void
+     */
     public function validation(BaseRequest $request, string|null $validationClass, $id = null): void
     {
         if ($validationClass) {
@@ -48,4 +56,29 @@ trait ValidationTrait
             }
         }
     }
+
+    /**
+     * Summary of setServices
+     * @return void
+     */
+    public function setServices() : void
+    {
+        $this->crudService = new CrudService();
+        if($this->indexServiceClass){
+            $this->indexService = new $this->indexServiceClass;
+        }
+        if($this->showServiceClass){
+            $this->showService = new $this->showServiceClass;
+        }
+        if($this->storeServiceClass){
+            $this->storeService = new $this->storeServiceClass;
+        }
+        if($this->updateServiceClass){
+            $this->updateService = new $this->updateServiceClass;
+        }
+        if($this->destroyServiceClass){
+            $this->destroyService = new $this->destroyServiceClass;
+        }
+    }
+
 }

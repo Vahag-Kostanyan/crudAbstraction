@@ -4,7 +4,6 @@
 namespace App\Modules\core\traits;
 
 use App\Modules\core\requests\BaseRequest;
-use App\Modules\core\services\CrudService;
 use Illuminate\Validation\ValidationException;
 
 trait CrudControllerTrait
@@ -20,7 +19,8 @@ trait CrudControllerTrait
     {
         if ($validationClass) {
             try {
-                app($validationClass);
+                $validationRequest = app($validationClass);
+                $validationRequest->after_validation();
             } catch (ValidationException $e) {
                 serverException();
             }
@@ -54,30 +54,6 @@ trait CrudControllerTrait
             if(!empty($errorArray)){
                 validationException(['include' => $errorArray]);
             }
-        }
-    }
-
-    /**
-     * Summary of setServices
-     * @return void
-     */
-    public function setServices() : void
-    {
-        $this->crudService = new CrudService();
-        if($this->indexServiceClass){
-            $this->indexService = new $this->indexServiceClass;
-        }
-        if($this->showServiceClass){
-            $this->showService = new $this->showServiceClass;
-        }
-        if($this->storeServiceClass){
-            $this->storeService = new $this->storeServiceClass;
-        }
-        if($this->updateServiceClass){
-            $this->updateService = new $this->updateServiceClass;
-        }
-        if($this->destroyServiceClass){
-            $this->destroyService = new $this->destroyServiceClass;
         }
     }
 

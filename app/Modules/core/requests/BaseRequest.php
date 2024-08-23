@@ -35,4 +35,10 @@ class BaseRequest extends FormRequest
     {
         return [];
     }
+
+    /**
+     * This function is called when validation completes
+     * @return void
+     */
+    public function after_validation(): void {}
 }

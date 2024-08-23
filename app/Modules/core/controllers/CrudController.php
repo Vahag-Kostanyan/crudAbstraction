@@ -8,6 +8,7 @@ use App\Modules\core\traits\CrudControllerTrait;
 use Illuminate\Http\JsonResponse;
 use App\Modules\core\interfaces\CrudControllerInterface;
 use App\Modules\core\requests\BaseRequest;
+use App\Modules\core\services\CrudService;
 use Illuminate\Database\Eloquent\Model;
 
 
@@ -34,11 +35,6 @@ abstract class CrudController extends Controller implements CrudControllerInterf
     protected $storeServiceClass; 
     protected $updateServiceClass;
     protected $destroyServiceClass;
-    protected $indexService;
-    protected $showService;
-    protected $storeService; 
-    protected $updateService;
-    protected $destroyService;
     protected $crudService;
 
     /**
@@ -47,7 +43,7 @@ abstract class CrudController extends Controller implements CrudControllerInterf
     public function __construct()
     {
         $this->model = app($this->modelClass);
-        $this->setServices();
+        $this->crudService = new CrudService();
     }
 
 
@@ -60,8 +56,8 @@ abstract class CrudController extends Controller implements CrudControllerInterf
     {
         $this->validation($request, $this->indexRequestClass);
 
-        if($this->indexService){
-            return response()->json($this->indexService->index($request, $this->model, $this->searchField));
+        if($this->indexServiceClass){
+            return response()->json(app($this->indexServiceClass)->index($request, $this->model, $this->searchField));
         }
         
         return response()->json($this->crudService->index($request, $this->model, $this->searchField));
@@ -78,8 +74,8 @@ abstract class CrudController extends Controller implements CrudControllerInterf
     {
         $this->validation($request, $this->showRequestClass, $id);
 
-        if($this->showService){
-            return response()->json($this->showService->show($request, $this->model, $id));
+        if($this->showServiceClass){
+            return response()->json(app($this->showServiceClass)->show($request, $this->model, $id));
         }
 
         return response()->json($this->crudService->show($request, $this->model, $id));
@@ -95,8 +91,8 @@ abstract class CrudController extends Controller implements CrudControllerInterf
     {
         $this->validation($request, $this->storeRequestClass);
 
-        if($this->storeService){
-            return response()->json($this->storeService->store($request, $this->model));
+        if($this->storeServiceClass){
+            return response()->json(app($this->storeServiceClass)->store($request, $this->model));
         }
 
         return response()->json($this->crudService->store($request, $this->model));
@@ -113,8 +109,8 @@ abstract class CrudController extends Controller implements CrudControllerInterf
     {
         $this->validation($request, $this->updateRequestClass, $id);
 
-        if($this->updateService){
-            return response()->json($this->updateService->update($request, $this->model, $id));
+        if($this->updateServiceClass){
+            return response()->json(app($this->updateServiceClass)->update($request, $this->model, $id));
         }
 
         return response()->json($this->crudService->update($request, $this->model, $id));
@@ -131,8 +127,8 @@ abstract class CrudController extends Controller implements CrudControllerInterf
     {
         $this->validation($request, $this->destroyRequestClass, $id);
 
-        if($this->destroyService){
-            return response()->json($this->destroyService->destroy($request, $this->model, $id));
+        if($this->destroyServiceClass){
+            return response()->json(app($this->destroyServiceClass)->destroy($request, $this->model, $id));
         }
 
         return response()->json($this->crudService->destroy($request, $this->model, $id));

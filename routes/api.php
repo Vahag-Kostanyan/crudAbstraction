@@ -17,4 +17,7 @@ use Illuminate\Support\Facades\Route;
 
 Route::post('/signup', [AuthController::class, 'signup']);
 Route::post('/signin', [AuthController::class, 'signin']);
-Route::resource('/examples', ExampleController::class)->only(['index', 'show', 'store', 'update', 'destroy']);
+
+Route::middleware('auth:sanctum')->group(function () {
+    Route::resource('/examples', ExampleController::class)->only(['index', 'show', 'store', 'update', 'destroy']);
+});

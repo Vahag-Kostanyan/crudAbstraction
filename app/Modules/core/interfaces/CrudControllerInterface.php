@@ -3,46 +3,50 @@
 
 namespace App\Modules\core\interfaces;
 
-use App\Modules\core\requests\BaseRequest;
+use App\Modules\core\requests\crud\BaseDestroyRequest;
+use App\Modules\core\requests\crud\BaseIndexRequest;
+use App\Modules\core\requests\crud\BaseShowRequest;
+use App\Modules\core\requests\crud\BaseStoreRequest;
+use App\Modules\core\requests\crud\BaseUpdateRequest;
 use Illuminate\Http\JsonResponse;
 
 interface CrudControllerInterface
 {
     /**
      * Summary of index
-     * @param BaseRequest $request
+     * @param BaseIndexRequest $request
      * @return JsonResponse
      */
-    public function index(BaseRequest $request): JsonResponse;
+    public function index(BaseIndexRequest $request): JsonResponse;
 
     /**
      * Summary of index
-     * @param BaseRequest $request
+     * @param BaseShowRequest $request
      * @param int|string $id
      * @return JsonResponse
      */
-    public function show(BaseRequest $request, int|string $id): JsonResponse;
+    public function show(BaseShowRequest $request, int|string $id): JsonResponse;
 
     /**
      * Summary of index
-     * @param BaseRequest $request
+     * @param BaseStoreRequest $request
      * @return JsonResponse
      */
-    public function store(BaseRequest $request): JsonResponse;
+    public function store(BaseStoreRequest $request): JsonResponse;
 
     /**
      * Summary of index
-     * @param BaseRequest $request
+     * @param BaseUpdateRequest $request
      * @param int|string $id
      * @return JsonResponse
      */
-    public function update(BaseRequest $request, int|string $id): JsonResponse;
+    public function update(BaseUpdateRequest $request, int|string $id): JsonResponse;
 
     /**
      * Summary of index
-     * @param BaseRequest $request
+     * @param BaseDestroyRequest $request
      * @param int|string $id
      * @return JsonResponse
      */
-    public function destroy(BaseRequest $request, int|string $id): JsonResponse;
+    public function destroy(BaseDestroyRequest $request, int|string $id): JsonResponse;
 }

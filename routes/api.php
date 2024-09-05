@@ -1,7 +1,7 @@
 <?php
 
+use App\Modules\auth\controller\AuthController;
 use App\Modules\example\controllers\ExampleController;
-use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
 
 /*
@@ -15,4 +15,9 @@ use Illuminate\Support\Facades\Route;
 |
 */
 
-Route::resource('/examples', ExampleController::class)->only(['index', 'show', 'store', 'update', 'destroy']);
+Route::post('/signup', [AuthController::class, 'signup']);
+Route::post('/signin', [AuthController::class, 'signin']);
+
+Route::middleware('auth:sanctum')->group(function () {
+    Route::resource('/examples', ExampleController::class)->only(['index', 'show', 'store', 'update', 'destroy']);
+});

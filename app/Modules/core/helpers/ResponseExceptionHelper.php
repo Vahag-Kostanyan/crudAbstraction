@@ -43,3 +43,15 @@ function permissionException(string $message = null)
         'errors' => [$message ?? 'Permission dinide!']
     ], 403));
 }
+
+/**
+ * @return void
+ * @exception HttpResponseException
+ */
+function authException(string|null $message = null)
+{
+    throw new HttpResponseException(response()->json([
+        'status' => false,
+        'errors' => $message ?? ['Email & Password does not match with our record!']                
+    ], 401));
+}

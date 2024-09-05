@@ -3,6 +3,7 @@
 namespace  App\Modules\core\requests;
 
 use Illuminate\Contracts\Validation\Validator;
+use Illuminate\Database\Eloquent\Model;
 use Illuminate\Http\Exceptions\HttpResponseException;
 use Illuminate\Foundation\Http\FormRequest;
 
@@ -37,8 +38,12 @@ class BaseRequest extends FormRequest
     }
 
     /**
-     * This function is called when validation completes
+     * Summary of after_validation
+     * @param int|null $id
+     * @param array|null $searchField
+     * @param array|null $allowedIncludes
+     * @param \Illuminate\Database\Eloquent\Model $model
      * @return void
      */
-    public function after_validation(): void {}
+    public function after_validation(int|null $id,  array|null $searchField, array|null $allowedIncludes, Model $model): void {}
 }

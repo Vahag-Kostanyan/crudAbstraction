@@ -1,11 +1,11 @@
 <?php
 
-namespace App\Modules\example\requests;
+namespace  App\Modules\core\requests\crud;
 
-use App\Modules\core\requests\crud\BaseStoreRequest;
+use App\Modules\core\requests\BaseRequest;
 use Illuminate\Database\Eloquent\Model;
 
-class StoreRequest extends BaseStoreRequest
+class BaseDeleteRequest extends BaseRequest
 {
     /**
      * Get the validation rules that apply to the request.
@@ -14,17 +14,21 @@ class StoreRequest extends BaseStoreRequest
      */
     public function rules(): array
     {
-        return [
-            'name' => ['required', 'string', 'max:255', 'min:3'],
-        ];
+        return [];
     }
 
     /**
      * Summary of after_validation
+     * @param int|null $id
+     * @param array|null $searchField
+     * @param array|null $allowedIncludes
+     * @param \Illuminate\Database\Eloquent\Model $model
      * @return void
      */
     public function after_validation(int|null $id,  array|null $searchField, array|null $allowedIncludes, Model $model): void
     {
-        $this->merge(['created_by' => auth()->user()->id]);
+        if (!$this->model->find($id)) {
+            validationException(['id' => ['Invalid record id']]);
+        }
     }
 }

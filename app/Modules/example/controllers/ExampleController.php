@@ -11,7 +11,7 @@ use App\Modules\example\services\ShowService;
 
 class ExampleController extends CrudController
 {
-    protected $modelClass = Example::class;
-    protected $storeRequestClass = StoreRequest::class;
+    protected string $modelClass = Example::class;
+    protected string $storeRequestClass = StoreRequest::class;
     protected $showServiceClass = ShowService::class;
 }

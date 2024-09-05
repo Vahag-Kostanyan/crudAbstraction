@@ -22,12 +22,12 @@ class BaseUpdateRequest extends BaseRequest
      * @param int|null $id
      * @param array|null $searchField
      * @param array|null $allowedIncludes
-     * @param \Illuminate\Database\Eloquent\Model $model
+     * @param Model $model
      * @return void
      */
     public function after_validation(int|null $id,  array|null $searchField, array|null $allowedIncludes, Model $model): void
     {
-        if (!$this->model->find($id)) {
+        if (!$model->find($id)) {
             validationException(['id' => ['Invalid record id']]);
         }
     }

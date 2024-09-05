@@ -1,17 +1,15 @@
 <?php
 
-
-namespace App\Modules\example\services;
+namespace App\Modules\core\services\crud;
 
 use App\Modules\core\interfaces\crud\ShowInterface;
 use App\Modules\core\requests\crud\BaseShowRequest;
-use App\Modules\core\services\crud\BaseShowService;
 use Exception;
 use Illuminate\Database\Eloquent\Model;
 
-class ShowService extends BaseShowService implements ShowInterface
+class BaseShowService implements ShowInterface
 {
-    /**
+     /**
      * Summary of show
      * @param BaseShowRequest $request
      * @param Model $model
@@ -21,11 +19,21 @@ class ShowService extends BaseShowService implements ShowInterface
     public function show(BaseShowRequest $request, Model $model, int|string $id): array
     {
         try {
-            // Your functional
+            $query = $model->query();
 
-            return parent::show($request, $model, $id);
+            $query->where('id', $id);
+
+            if ($request->has('include')) {
+                $include = explode('&', $request->input('include'));
+                $model->with($include);
+            }
+
+            return [
+                'data' => $query->first(),
+            ];
         } catch (Exception $ex) {
             serverException();
         }
     }
+
 }

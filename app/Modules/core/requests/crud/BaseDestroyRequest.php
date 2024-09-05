@@ -5,7 +5,7 @@ namespace  App\Modules\core\requests\crud;
 use App\Modules\core\requests\BaseRequest;
 use Illuminate\Database\Eloquent\Model;
 
-class BaseDeleteRequest extends BaseRequest
+class BaseDestroyRequest extends BaseRequest
 {
     /**
      * Get the validation rules that apply to the request.
@@ -27,7 +27,7 @@ class BaseDeleteRequest extends BaseRequest
      */
     public function after_validation(int|null $id,  array|null $searchField, array|null $allowedIncludes, Model $model): void
     {
-        if (!$this->model->find($id)) {
+        if (!$model->find($id)) {
             validationException(['id' => ['Invalid record id']]);
         }
     }

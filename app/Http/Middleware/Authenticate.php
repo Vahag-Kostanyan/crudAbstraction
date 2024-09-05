@@ -3,6 +3,7 @@
 namespace App\Http\Middleware;
 
 use Illuminate\Auth\Middleware\Authenticate as Middleware;
+use Illuminate\Http\Exceptions\HttpResponseException;
 use Illuminate\Http\Request;
 
 class Authenticate extends Middleware
@@ -12,6 +13,11 @@ class Authenticate extends Middleware
      */
     protected function redirectTo(Request $request): ?string
     {
-        return $request->expectsJson() ? null : route('login');
+        if($request->expectsJson())  return null;
+
+        throw new HttpResponseException(response()->json([
+            'status' => false,
+            'errors' => ['Invalid user token!']
+        ], 401));
     }
 }
